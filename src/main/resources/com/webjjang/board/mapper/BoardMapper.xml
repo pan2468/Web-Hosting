@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 1. com.webjjang.board.mapper.BoardMapper 인터페이스 선언
+		  - src/main/java
+	 2. root-context.xml mybatis:scan 태그로 기본 패키지 지정
+	 3. com.webjjang.board.mapper.BoardMapper.xml 실행 작성
+	 	  - src/main/resources -->
+<mapper namespace="com.webjjang.board.mapper.BoardMapper">
+   
+   <select id="list" resultType="com.webjjang.board.vo.BoardVO">
+      select no,title,writer,writeDate,hit 
+      from board11  
+   </select>
+   
+ <!--   <select id="listPage" resultType="org.zerock.domain.BoardVO">
+	<![CDATA[
+		select
+			no, title,writer, writeDate, hit
+		from
+			(
+			select 
+				rownum rn, no, title, writer, writeDate, hit
+			from
+				board11
+			where rownum <= 20
+			)
+		where rn > 10
+	]]>
+</select> -->
+   
+<!--    <select resultType="com.webjjang.board.vo.BoardVO" id="list">
+   select * from (select rownum rnum,no,title,writer,writeDate,hit 
+                 from(select no,title,writer,writeDate,hit 
+                 from board11
+   order by no desc))where rnum between #{startRow} and #{endRow} </select>
+ -->
+
+<!--    <select id="list" resultType="com.webjjang.board.vo.BoardVO">
+      select no,title,writer,writeDate,hit 
+      from board11  
+   </select>   --> 
+   
+<!--    
+   <select id="listPage" resultType="kr.co.vo.BoardVO" parameterType="kr.co.vo.Criteria">
+		SELECT  NO, 
+		        TITLE, 
+	            WRITER,
+	            WRITEDATE,
+		        HIT
+		 FROM ( 
+		        SELECT NO, 
+		              TITLE, 
+		              WRITER,
+	                  WRITEDATE,
+		              HIT
+		               ROW_NUMBER() OVER(ORDER BY NO DESC) AS RNUM
+		         FROM BOARD11
+		                       ) BOARD11
+		WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		ORDER BY NO DESC
+	</select> -->
+   
+
+
+   <insert id="write">
+      <![CDATA[
+           insert into board11(no,title,writer,content,writedate,hit)
+           values(board9_seq.nextval,#{title},#{writer},#{content},sysdate,0)
+      ]]>
+   </insert>
+   
+   
+      <select id="view" resultType="com.webjjang.board.vo.BoardVO">
+      <![CDATA[
+          select no,writer,hit,writeDate
+          from board11
+          where no=#{no}
+      ]]>
+     
+   </select>
+
+      <select id="view2" resultType="com.webjjang.board.vo.BoardVO">
+      <![CDATA[
+          select no,title,writer,content
+          from board11
+          where no=#{no}
+      ]]>
+     
+   </select>
+      
+   
+   
+   
+   
+    <update id="increase">
+      <![CDATA[
+           update board11
+           set hit = hit + 1
+           where no =#{no}
+      ]]>
+   </update>
+   
+   
+     <update id="update">
+      <![CDATA[
+        update board11
+        set title=#{title},writer=#{writer},content=#{content}
+        where no =#{no}
+      ]]>
+   </update>
+   
+   <delete id="delete">
+<![CDATA[
+        delete from board11
+        where no = #{no}
+      ]]>
+</delete>
+   
+   
+</mapper>
+
